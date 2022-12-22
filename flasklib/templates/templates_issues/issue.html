@@ -1,0 +1,57 @@
+{% extends 'templates_members/members.html' %}
+
+{% block searchbar %}
+<div class="container card col-11 p-0">
+  <div class="row g-0">
+    <div class="col-md-3" style="background-color:rgb(33,37,41);">
+      <h1 class="text-white m-4 display-6">Issue Book</h1>
+    </div>
+    <div class="col-md-9">
+      <div class="card-body">
+        <div class="text-muted">{{ bid }}</div>
+        <div class="row">
+          <form class="col-6" action="/issue_book/{{bid}}/search_member/None" method="POST">
+            <label class="form-control-label fw-bold">Name</label>
+            <div class="input-group mb-3">
+              <input type="text" name="searchbar" id="searchbar" autocomplete="off" class="form-control">
+              <input type="submit" value="Search" class="btn btn-outline-success" id="button-addon2">
+            </div>
+          </form>
+          <form class="col-6" class="d-grid" action="/issue_book/{{bid}}" method="POST">
+            {{ form.hidden_tag() }}
+            <fieldset>
+              {{ form.days.label(class="form-control-label fw-bold") }}
+              <div class="input-group mb-3">
+                {{ form.days(class="form-control form-control-md") }}
+                {{ form.submit(class="btn btn-outline-dark") }}
+              </div>
+            </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock searchbar %}
+{% block debt %}
+{% endblock debt %}
+{% block options %}
+<td>
+<div>
+  {{ form.memberRadio(class="form-check-input",type="radio",id="memberRadio",value=member.mid) }}
+</div>
+</td>
+{% endblock options %}
+</form>
+{% block pagination %}
+  {% for pagenum in members.iter_pages() %}
+      {% if pagenum %}
+          {% if pagenum==members.page %} 
+          <li class="page-item active"><a class="page-link" href="{{ url_for('issues.issue_book',bid=bid,page=pagenum,keyword=keyword) }}">{{ pagenum }}</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('issues.issue_book',bid=bid,page=pagenum,keyword=keyword) }}">{{ pagenum }}</a></li>
+          {% endif %}
+      {% else %}
+      . . .
+      {% endif %}
+  {% endfor %}
+{% endblock pagination %}

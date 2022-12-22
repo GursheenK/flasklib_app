@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container col-11">
+    <div class="card shadow rounded">
+        <div class="row g-0">
+            <div class="col-md-3" style="background-color:rgb(33,37,41);">
+                <h1 class="text-white m-4 display-6">Book Return</h1>
+            </div>
+            <div class="col-md-9 p-2">
+                <div class="card-body">
+                    <h5>{{ book.title }}</h5>
+                    <p><em>Issued to {{ issues|length }} members</em></p>
+                    <form class="d-grid" action="/issue_return/{{book.bid}}" method="POST" style="display: inline;">
+                        {{ form.hidden_tag() }}
+                        <div class="input-group">
+                            {{ form.date(class="form-control",type="date")}}
+                            <input type="submit" name="submit_return" value="Issue Return"
+                                class="btn btn-outline-primary">
+                            <input type="submit" name="submit_return" value="Pay Now"
+                                class="btn btn-outline-dark">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if issues|length> 0 %}
+    <div class="table-responsive container px-0">
+        <table class="table align-middle table-bordered">
+            <thead>
+                <tr class="text-center">
+                    <th scope="col">Issue Id</th>
+                    <th scope="col">Member Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Issued On</th>
+                    <th scope="col">Days</th>
+                    <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr class="text-center">
+                    <td>{{ issue.issue_id }}</td>
+                    <td>{{ issue.mid }}</td>
+                    <td>{{ issue.issues.mname }}</td>
+                    <td>{{ issue.issue_date.date() }}</td>
+                    <td>{{ issue.days }}</td>
+                    <td>
+                        {{ form.memberRadio(class="form-check-input",type="radio",id="memberRadio",value=issue.mid) }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+</form>

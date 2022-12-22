@@ -1,0 +1,18 @@
+.ui-menu{
+    background-color: #f9f9f9!important;
+    width: 59%!important;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2)!important;
+    list-style-type: none!important;
+    padding: 0px;
+}
+
+.ui-menu-item{
+    font-size: large;
+    border-top: 1px solid rgb(179, 179, 179);
+    padding: 15px;
+}
+
+a.ui-corner-all{
+    text-decoration: none;
+    color: black;
+}

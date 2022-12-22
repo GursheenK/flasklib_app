@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container col-8">
+    <div class="card shadow rounded">
+        <div class="row g-0">
+            <div class="col-md-3 p-0" style="background-color:rgb(33,37,41);">
+                <h2 class="text-white display-6 m-3">{{ title }}</h2>
+            </div>
+            <div class="col-md-9 p-3">
+                <div class="card-body">
+                    <form class="d-grid" action="" method="POST">
+                        {{ form.hidden_tag() }}
+                        <fieldset>
+                            <div class="form-group mb-3">
+                                {{ form.mname.label(class="form-control-label fw-bold") }}
+                                {% if form.mname.errors %}
+                                    {{ form.mname(class="form-control form-control-lg is-invalid") }}
+                                    {% for error in form.mname.errors %}
+                                    <div class="invalid-feedback">
+                                        <span>{{ error }}</span>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    {{ form.mname(class="form-control form-control-md") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ form.email.label(class="form-control-label fw-bold") }}
+                                {% if form.email.errors %}
+                                    {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                    {% for error in form.email.errors %}
+                                    <div class="invalid-feedback">
+                                        <span>{{ error }}</span>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    {{ form.email(class="form-control form-control-md") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ form.contact.label(class="form-control-label fw-bold") }}
+                                {% if form.contact.errors %}
+                                    {{ form.contact(class="form-control form-control-lg is-invalid") }}
+                                    {% for error in form.contact.errors %}
+                                    <div class="invalid-feedback">
+                                        <span>{{ error }}</span>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    {{ form.contact(class="form-control form-control-md") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-outline-dark") }}
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

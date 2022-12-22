@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% block nav %}
+{% endblock nav %}
+{% set booknames=[] %}
+  {% set booksqty=[] %}
+  {% set booksavail=[] %}
+  {% for book in books %}
+  {{ booknames.append(book.title+' | Borrow Count:'+(bcount[books.index(book)]|string)) or "" }}
+  {{ booksqty.append(book.quantity) or "" }}
+  {{ booksavail.append(book.availability) or "" }}
+{% endfor %}
+<div class="container">
+<h1>Most Popular Books</h1><br>
+<table class="table table-bordered">
+    <thead>
+        <th scope="col">Isbn</th>
+        <th scope="col">Title</th>
+        <th scope="col">Authors</th>
+        <th scope="col">Publisher</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Availability</th>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.authors }}</td>
+            <td>{{ book.publisher }}</td>
+            <td>{{ book.quantity }}</td>
+            <td>{{ book.availability }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock content %}

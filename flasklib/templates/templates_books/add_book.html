@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container col-11">
+    <div class="card shadow rounded">
+        <div class="row g-0">
+            <div class="col-md-2 p-0" style="background-color:rgb(33,37,41);">
+                <h2 class="text-white display-6 m-3">{{ title }}</h2>
+            </div>
+            <div class="col-md-9 p-3">
+                <div class="card-body">
+                    <form class="d-grid gap-4" action="{{ url_for('books.add_book') }}" method="POST">
+                        {{ form.hidden_tag() }}
+                        <fieldset>
+                            <div class="row">
+                                <div class="col form-group mb-2">
+                                    {{ form.title.label(class="form-control-label fw-bold") }}
+                                    {{ form.title(class="form-control form-control-md") }}
+                                </div>
+                                <div class="col form-group mb-2">
+                                    {{ form.author.label(class="form-control-label fw-bold") }}
+                                    {{ form.author(class="form-control form-control-md") }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group mb-1">
+                                    {{ form.amount.label(class="form-control-label fw-bold") }}
+                                    {{ form.amount(class="form-control form-control-md custom-range") }}
+                                </div>
+                                <div class="col form-group mb-1">
+                                    {{ form.isbn.label(class="form-control-label fw-bold") }}
+                                    {{ form.isbn(class="form-control form-control-md") }}
+                                </div> 
+                            </div>
+                            <br>
+                            <div class="col input-group mb-1">
+                                <input type="submit" name="submit_button" value="Search"
+                                    class="btn btn-outline-primary">
+                                <input type="submit" name="submit_button" value="Import All"
+                                    class="btn btn-outline-dark">
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <h5>Found ({{ books|length }})</h5>
+{% if books %}
+<div class="table-responsive">
+    <table class="table align-middle table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Isbn</th>
+                <th scope="col">Title</th>
+                <th scope="col">Authors</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Publisher</th>
+                <th scope="col">Published On</th>
+                <th scope="col">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.isbn }}</td>
+                <td class="col-4 py-3 px-2">{{ book.title }}</td>
+                <td>{{ book.authors }}</td>
+                <td>{{ book.average_rating }}</td>
+                <td class="col-3">{{ book.publisher }}</td>
+                <td>{{ book.publication_date }}</td>
+                <td>
+                    <a class="btn" href="{{ url_for('books.add_onebook',isbn=book['isbn']) }}" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="Import">
+                        <i class="bi bi-box-arrow-down" style="font-size: 1.3rem; color:green ;"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+{% else %}
+    <div class="container card my-3 shadow rounded">
+        <div class="card-body">
+            No books found. Add one.
+        </div>
+    </div>
+{% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

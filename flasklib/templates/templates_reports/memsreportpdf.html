@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% block nav %}
+{% endblock nav %}
+{% set booknames=[] %}
+  {% set booksqty=[] %}
+  {% set booksavail=[] %}
+  {% for book in books %}
+  {{ booknames.append(book.title+' | Borrow Count:'+(bcount[books.index(book)]|string)) or "" }}
+  {{ booksqty.append(book.quantity) or "" }}
+  {{ booksavail.append(book.availability) or "" }}
+{% endfor %}
+
+<div class="container col-12">
+<h1>Most frequent Customers</h1><br>
+<table class="table table-bordered">
+    <thead>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Contact</th>
+        <th scope="col">Joined On</th>
+        <th scope="col">Total</th>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member[0].mname }}</td>
+            <td>{{ member[0].email }}</td>
+            <td>{{ member[0].contact }}</td>
+            <td>{{ member[0].date_added.date() }}</td>
+            <td>{{ member[1] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock content %}

@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% set weeklycount=[] %}
+{% for i in weeklyissues %}
+    {{ weeklycount.append(i[1]) or "" }}
+{% endfor %}
+<div class="container">
+    <div class="row px-2 gap-3">
+        <div class="col-2 card bg-dark text-white" style="border: 10px solid;
+        border-image-slice: 1;
+        border-width: 3px;border-image-source: linear-gradient(to left, #743ad5,#95ddf3);">
+            <div class="card-body p-1">
+                <h4>TOTAL <h4>BOOKS</h4></h4>
+                <h5 class="card-text">{{ totalb }}</h5>
+                <a href="{{ url_for('books.add_book') }}"><i class="bi bi-plus position-absolute bottom-0 end-0 me-2 mb-1" style="font-size:1.5rem;color: white;"></i></a>
+            </div>
+        </div>
+        <div class="col-2 card bg-dark text-white"  style="border: 10px solid;
+        border-image-slice: 1;
+        border-width: 3px;border-image-source: linear-gradient(to left, #743ad5, #95ddf3);">
+            <div class="card-body p-1">
+                <h4>BOOKS ISSUED</h4>
+                <h5 class="card-text">{{ totali }}</h5>
+                <a href="{{ url_for('books.viewbooks') }}"><i class="bi bi-arrow-up-right-square position-absolute bottom-0 end-0 me-3 mb-2" style="font-size:1.2rem;color: white;"></i></a>
+            </div>
+        </div>
+        <div class="col-2 card bg-dark text-white"  style="border: 10px solid;
+        border-image-slice: 1;
+        border-width: 3px;border-image-source: linear-gradient(to left, #743ad5, #95ddf3);">
+            <div class="card-body p-1">
+                <h4>TOTAL MEMBERS</h4>
+                <h5 class="card-text">{{ totalm }}</h5>
+                <a href="{{ url_for('members.add_member') }}"><i class="bi bi-plus position-absolute bottom-0 end-0 me-2 mb-1" style="font-size:1.5rem;color: white;"></i></a>
+            </div>
+        </div>
+        <div class="col card shadow rounded">
+            <h5>NO. OF BOOKS ISSUED THIS WEEK</h5>
+            <canvas id="issueChart" height="100rem"></canvas>
+        </div>
+    </div>
+    <br>
+    <div class="row px-2 gap-4">
+        <div class="col-4 card shadow rounded">
+            <h1 class="display-6">Books to Restock</h1>
+            <ul class="list-group list-group-flush">
+            {% if totalb==0 %}
+                <div class="p-2">
+                No books found. Add books.
+                </div>
+            {% else %}
+                {% for book in restock %}
+                <li class="list-group-item">{{ book.title }}</li>
+                {% endfor %}
+            {% endif %}
+            </ul>
+        </div>
+        <div class="col-3 card shadow rounded">
+            <h1 class="display-6">New Members</h1>
+            <ul class="list-group list-group-flush">
+            {% if totalm==0 %}
+                <div class="p-2">
+                No members found. Add members.
+                </div>
+            {% else %}
+                {% for member in newmembers %}
+                <li class="list-group-item">
+                    <a style="text-decoration: none;color:black" href="{{url_for('members.member_info',mid=member.mid)}}">
+                        {{ member.mname }}<br>
+                        <span class="text-muted">Joined on {{ member.date_added.date() }}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            {% endif %}
+            </ul>
+        </div>
+        <div class="col-4 card shadow rounded">
+            <h1 class="display-6">Recently Issued Books</h1>
+            {% if recentissues[0]=='' %}
+                <div class="p-2">
+                No books issued yet.
+                </div>
+            {% else %}
+                <table class="table table-borderless">
+                <thead>
+                    <tr>
+                    <th scope="col">Book</th>
+                    <th scope="col">Member</th>
+                    <th scope="col">Days</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    {% for issue in recentissues %}
+                    <td>{{ issue.bid }}</td>
+                    <td><a style="text-decoration: none;color:black" href="{{url_for('members.member_info',mid=issue.issues.mid)}}">{{ issue.issues.mname }}</a></td>
+                    <td>{{ issue.days }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <div class="row px-2 gap-3">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static',filename='js/home.js') }}" type="text/javascript"></script>
+<script>
+    createLine({{ weeklycount|safe }});
+</script>
+{% endblock content %}

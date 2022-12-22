@@ -1,0 +1,101 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container col-9">
+    <div class="card shadow rounded">
+        <div class="row g-0">
+            <div class="col-md-3 p-0" style="background-color:rgb(33,37,41);">
+                <h2 class="text-white display-6 m-3">{{ member.mname }}</h2>
+            </div>
+            <div class="col-md-9 p-2">
+                <div class="card-body">
+                    <h5>Email</h5><h6 class="text-muted">{{ member.email }}</h6>
+                    <h5>Contact</h5><h6 class="text-muted">{{ member.contact }}</h6>
+                    <h5>Joined On</h5><h6 class="text-muted">{{ member.date_added.date() }}</h6>
+                    <a class="btn position-absolute top-0 end-0 m-2" href="{{ url_for('members.update_member',mid=member.mid) }}" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" title="Update">
+                        <i class="bi bi-pen" style="font-size: 1.2rem;"></i>
+                    </a>
+                    <form class="position-absolute bottom-0 end-0 m-2" action="{{ url_for('members.delete_member',mid=member.mid) }}" method="POST" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="Delete" style="width: 45.2px;display: inline;margin: 2px;">
+                        <button type="submit" class="btn">
+                            <i class="bi bi-trash" style="font-size: 1.2rem;"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-top-0 shadow rounded">
+        <div class="card-body p-3 py-4">
+            <h5 style="color: #0951be;">Currently Borrowed Books</h5><br>
+                {% if borrowed|length>0 %}
+                <div class="col-11 container">
+                    <table class="table table-bordered">
+                        <thead class="text-center">
+                            <tr>
+                            <th scope="col">Book Id</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for book in borrowed %}
+                            <tr>
+                            <td class="p-4">{{ book.bid }}</td>
+                            <td class="p-4">{{ book.title }}</td>
+                            <td class="p-4">{{ book.authors }}</td>
+                            <td class="p-4"> 
+                                <form action="{{ url_for('issues.issue_return',bid=book.bid) }}" method="GET" >
+                                <button type="submit" class="btn btn-sm btn-outline-dark">Return</button>
+                                </form>
+                            </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                    <h6 class="px-5">No books borrowed currently.</h6><br>
+                {% endif %}
+            <h5 style="color: #0951be;">Due Payments (₹{{ member.debt }})</h5><br>
+            {% if member.debt>0 %}
+            <div class="col-11 container">
+                <table class="table table-bordered">
+                    <thead class="text-center">
+                        <tr>
+                        <th scope="col">Issue Id</th>
+                        <th scope="col">Book Id</th>
+                        <th scope="col">Fee</th>
+                        <th scope="col">
+                            <form action="{{ url_for('members.member_info',mid=member.mid,issue_id=0) }}" method="POST" >
+                            <button type="submit" class="btn btn-sm btn-outline-dark">Pay All</button>
+                            </form>
+                        </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                    {% for issuedue in issuedues %}
+                        <tr>
+                        <td class="p-3">{{ issuedue.issue_id }}</td>
+                        <td class="p-3">{{ issuedue.bid }}</td>
+                        <td class="p-3">₹{{ issuedue.fee }}</td>
+                        <td class="p-3"> 
+                            <form action="{{ url_for('members.member_info',mid=member.mid,issue_id=issuedue.issue_id) }}" method="POST" >
+                            <button type="submit" class="btn btn-sm btn-outline-dark">Pay</button>
+                            </form>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <h6 class="px-5">No Payments due.</h6><br>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,164 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-10"><h4 class="px-2">Most Popular Books </h4></div>
+    <div class="col-2">
+      <form action="{{ url_for('main.reports',flag='bksreport') }}" method="POST" >
+      <button type="submit" class="btn btn-sm btn-outline-dark ms-4">Get Report</button>
+      </form>
+    </div>
+  </div>
+  {% set booknames=[] %}
+  {% set booksqty=[] %}
+  {% set booksavail=[] %}
+  {% for book in books %}
+    {{ booknames.append(book.title+' | Borrow Count:'+(bcount[books.index(book)]|string)) or "" }}
+    {{ booksqty.append(book.quantity) or "" }}
+    {{ booksavail.append(book.availability) or "" }}
+  {% endfor %}
+  <div class="row ps-3 gap-3">
+    <div class="card col-5 shadow rounded">
+      <div class="row">
+        <div class="col-1">
+          <table class="table table-borderless table-sm" style="height: 95%;">
+            <thead>
+              <th scope="col">#</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #0099FF;"></i></td>
+              </tr>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #99FFCC;"></i></td>
+              </tr>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #FFFF66;"></i></td>
+              </tr>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #FF6699;"></i></td>
+              </tr>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #8533FF;"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-11">
+
+          <table class="table responsive table-borderless table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Availability</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if books|length == 0 %}
+                {% for i in range(1,6) %}
+                <tr>
+                  <td>Title {{ i }}</td>
+                  <td>Quantity {{ i }}</td>
+                  <td>Availability {{ i }}</td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                {% for book in books %}
+                <tr>
+                  <td>{{ book.title }}</td>
+                  <td>{{ book.quantity }}</td>
+                  <td>{{ book.availability }}</td>
+                </tr>
+                {% endfor %}
+              {% endif %}
+          </table>
+        </div>
+      </div>
+
+    </div>
+    <div class="card col-3 shadow rounded">
+      <canvas class="mt-4" id="popularityChart" height=230rem width=250rem></canvas>
+    </div>
+    <div class="card col-3 p-2 shadow rounded">
+      <canvas id="quantityChart" height=245rem width=250rem></canvas>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-10"><h4 class="px-2">Highest Paying Customers </h4></div>
+    <div class="col-2"><form action="{{ url_for('main.reports',flag='memsreport') }}" method="POST" >
+      <button type="submit" class="btn btn-sm btn-outline-dark ms-4 ">Get Report</button>
+    </form></div>
+  </div>
+  <div class="row ps-4 gap-3">
+    <div class="card col-5 shadow rounded">
+      <div class="row">
+        <div class="col-1">
+          <table class="table table-borderless table-sm">
+            <thead>
+              <th scope="col">#</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #0099FF;"></i></td>
+              </tr>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #99FFCC;"></i></td>
+              </tr>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #FFFF66;"></i></td>
+              </tr>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #FF6699;"></i></td>
+              </tr>
+              <tr>
+                <td><i class="bi-square-fill" style="color: #8533FF;"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-10">
+          <table class="col-10 table table-borderless table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% set memberactivity=[] %}
+              {% if members|length == 0 %}
+                {% for i in range(1,6) %}
+                <tr>
+                  <td>Name {{ i }}</td>
+                  <td>Amount {{ i }}</td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                {% for member in (members|sort(attribute='1',reverse=True))[:5] %}
+                <tr>
+                  {{ memberactivity.append(activity[member[0].mid]) or "" }}
+                  <td>{{ member[0].mname }}</td>
+                  <td>{{ member[1] }}</td>
+                </tr>
+                {% endfor %}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card col-6 shadow rounded">
+      <canvas class="mt-4" id="memberChart" height=200rem width=500rem></canvas>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static',filename='js/home.js') }}" type="text/javascript"></script>
+<script>
+  createPie('popularityChart',{{ booknames| safe}}, {{ bcount| safe}});
+  createBar('quantityChart',{{ booksqty| safe}}, {{ booksavail| safe}});
+  createMemberLine({{ memberactivity| safe}});
+</script>
+{% endblock content %}
