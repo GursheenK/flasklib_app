@@ -69,7 +69,7 @@ def add_book():
                     if not bookindb:
                         db.session.add(book)
                         db.session.commit()
-                return redirect(url_for('books.viewbooks'))
+                flash('Books added successfully.','success')
     return render_template('templates_books/add_book.html',form=form,title="Add Books")
 
 @books.route("/add_onebook/<string:isbn>",methods=['GET','POST'])

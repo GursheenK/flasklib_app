@@ -7,8 +7,13 @@
 <div class="container card col-11 py-2">
     <h2 class="m-3">Books</h2>
     <form class="d-flex m-3" action="/search_book/None" method="POST">
+        {% if keyword %}
         <input type="text" name="searchbar" id="searchbar" autocomplete="off" class="form-control me-2"
-            placeholder="Title/Authors">
+            placeholder='{{keyword}}'>
+        {% else %}
+        <input type="text" name="searchbar" id="searchbar" autocomplete="off" class="form-control me-2"
+            placeholder='Title/Authors'>
+        {% endif %}
 
         <input type="submit" value="Search" class="btn btn-outline-success mx-2">
         <a href="{{ url_for('books.add_book') }}" class="btn btn-outline-primary" type="submit">Add</a>

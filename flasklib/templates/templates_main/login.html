@@ -39,27 +39,15 @@ background: linear-gradient(0deg, rgba(88,62,91,1) 0%, rgba(88,62,91,1) 21%, rgb
             <div class="col px-4">
               <div class="card h-100 shadow-lg rounded p-5 mx-3" style="background-color: rgba(255, 255, 255, 0.507);">
                 <div class="card-body">
-                    <div class="">
-                        {% with messages=get_flashed_messages(with_categories=True) %}
-                        {% for category,message in messages %}
-                        {% if category=='danger' %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                          {{ message }}
-                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                        {% endwith %}
-                    </div>
                     <img src="{{ url_for('static',filename='admin.svg') }}" class="card-img">
                     <form class="mt-4" action="" method="POST">
                         {{ adminform.hidden_tag() }}
                         <div class="form-group mb-3">
-                            {{ adminform.username.label(class="form-control-label") }}
+                            {{ adminform.username.label(class="form-control-label fw-bold") }}
                             {% if adminform.username.errors %}
                                 {{ adminform.username(class="form-control is-invalid") }}
                                 {% for error in adminform.username.errors %}
-                                    <div class="text-dark">
+                                    <div class="invalid-feedback">
                                         <span>{{ error }}</span>
                                     </div>
                                 {% endfor %}
@@ -68,11 +56,11 @@ background: linear-gradient(0deg, rgba(88,62,91,1) 0%, rgba(88,62,91,1) 21%, rgb
                             {% endif %}
                         </div>
                         <div class="form-group mb-3">
-                            {{ adminform.password.label(class="form-control-label") }}
+                            {{ adminform.password.label(class="form-control-label fw-bold") }}
                             {% if adminform.password.errors %}
                                 {{ adminform.password(class="form-control is-invalid") }}
                                 {% for error in adminform.password.errors %}
-                                    <div class="text-dark">
+                                    <div class="invalid-feedback">
                                         <span>{{ error }}</span>
                                     </div>
                                 {% endfor %}

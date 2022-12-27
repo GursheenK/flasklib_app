@@ -32,9 +32,11 @@
         <div class="container card py-2 my-4">
             <h2 class="m-3">Currently Available Books</h2>
             <form class="d-flex m-3" action="{{ url_for('main.guest')}}" method="POST">
-                <input type="text" name="searchbar" id="searchbar" autocomplete="off" class="form-control me-2"
-                    placeholder="Title/Authors">
-
+                {% if keyword %}
+                    <input type="text" name="searchbar" id="searchbar" autocomplete="off" class="form-control me-2" placeholder="{{keyword}}">
+                {% else %}
+                    <input type="text" name="searchbar" id="searchbar" autocomplete="off" class="form-control me-2" placeholder="Title/Authors">
+                {% endif %}
                 <input type="submit" value="Search" class="btn btn-outline-success mx-2">
             </form>
         </div>

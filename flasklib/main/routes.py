@@ -1,3 +1,4 @@
+import html
 from flask import render_template,flash,url_for,redirect,request,make_response
 from flasklib import db,bcrypt
 from flasklib.models import Member,Book,BookIssue,Admin
@@ -8,6 +9,7 @@ import pdfkit
 from flask_login import login_required,login_user,logout_user
 
 from flask import Blueprint
+
 
 main=Blueprint('main',__name__)
 
@@ -92,7 +94,7 @@ def reports():
         if request.args['flag']=='memsreport':
             rendered=render_template('templates_reports/memsreportpdf.html',members=members[:10])
         #config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
-        pdf=pdfkit.from_string(rendered,False,configuration=config)
+        pdf=pdfkit.from_string(rendered,False)#configuration=config
         response=make_response(pdf)
         response.headers['Content-Type']='application/pdf'
         response.headers['Content-Disposition']='inline; filename=generated.pdf'
