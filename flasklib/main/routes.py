@@ -93,6 +93,10 @@ def reports():
             rendered=render_template('templates_reports/bksreportpdf.html',books=books,bcount=bcount)
         if request.args['flag']=='memsreport':
             rendered=render_template('templates_reports/memsreportpdf.html',members=members[:10])
+        #for live -
+        #config = pdfkit.configuration(wkhtmltopdf="wkhtmltopdf/bin")
+        #pdf = pdfkit.from_string(rendered,False)
+        #for local -
         config = pdfkit.configuration(wkhtmltopdf="C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe")
         pdf=pdfkit.from_string(rendered,configuration=config)
         response=make_response(pdf)
