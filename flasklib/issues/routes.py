@@ -13,6 +13,7 @@ issues=Blueprint('issues',__name__)
 @issues.route("/issue_book/<int:bid>",methods=['GET','POST'])
 @login_required
 def issue_book(bid):
+    book=Book.query.get(bid)
     form=IssueForm()
     page=request.args.get('page',1,type=int)
     members=Member.query.paginate(per_page=10,page=page)
@@ -22,7 +23,6 @@ def issue_book(bid):
         return redirect(url_for('books.viewbooks'))
     if form.validate_on_submit():
         mid=request.form['memberRadio']
-        book=Book.query.get(bid)
         if book.availability<1:
             flash('Book not available!','danger')
         elif mid in book.borrowers.split(','):
@@ -40,7 +40,7 @@ def issue_book(bid):
             db.session.commit()
             flash('Book Issued!','success')
         return redirect(url_for('books.viewbooks'))
-    return render_template('templates_issues/issue.html',title='Issue a Book',members=members,form=form,bid=bid)
+    return render_template('templates_issues/issue.html',title='Issue a Book',members=members,form=form,book=book)
 
 @issues.route("/issue_return/<int:bid>",methods=['GET','POST'])
 @login_required

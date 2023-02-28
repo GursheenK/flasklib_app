@@ -32,23 +32,28 @@
             <h5 style="color: #0951be;">Currently Borrowed Books</h5><br>
                 {% if borrowed|length>0 %}
                 <div class="col-11 container">
-                    <table class="table table-bordered">
-                        <thead class="text-center">
+                    <table class="table table-bordered table-responsive">
+                        <thead class="">
                             <tr>
                             <th scope="col">Book Id</th>
                             <th scope="col">Title</th>
                             <th scope="col">Author</th>
+                            <th scope="col">Issue Date</th>
+                            <th scope="col">Issue Days</th>
                             <th scope="col">Options</th>
                             </tr>
                         </thead>
                         <tbody>
-                        {% for book in borrowed %}
+                        {% for i in range(borrowed|length) %}
                             <tr>
-                            <td class="p-4">{{ book.bid }}</td>
-                            <td class="p-4">{{ book.title }}</td>
-                            <td class="p-4">{{ book.authors }}</td>
-                            <td class="p-4"> 
-                                <form action="{{ url_for('issues.issue_return',bid=book.bid) }}" method="GET" >
+                            <td class="p-2">{{ borrowed[i].bid }}</td>
+                            <td class="p-2">{{ borrowed[i].title }}</td>
+                            <td class="p-2">{{ borrowed[i].authors }}</td>
+                            {% set issuedate = member.issues[i].issue_date|string %}
+                            <td class="p-2">{{ issuedate[:10] }}</td>
+                            <td class="p-2">{{ member.issues[i].days }}</td>
+                            <td class="p-2"> 
+                                <form action="{{ url_for('issues.issue_return',bid=borrowed[i].bid) }}" method="GET" >
                                 <button type="submit" class="btn btn-sm btn-outline-dark">Return</button>
                                 </form>
                             </td>
@@ -68,6 +73,8 @@
                         <tr>
                         <th scope="col">Issue Id</th>
                         <th scope="col">Book Id</th>
+                        <th scope="col">Issue Date</th>
+                        <th scope="col">Due Date</th>
                         <th scope="col">Fee</th>
                         <th scope="col">
                             <form action="{{ url_for('members.member_info',mid=member.mid,issue_id=0) }}" method="POST" >
@@ -81,6 +88,10 @@
                         <tr>
                         <td class="p-3">{{ issuedue.issue_id }}</td>
                         <td class="p-3">{{ issuedue.bid }}</td>
+                        {% set issuedate = issuedue.issue_date|string %}
+                        <td class="p-3">{{ issuedate[:10] }}</td>
+                        {% set duedate = issuedue.due_date|string %}
+                        <td class="p-3">{{ duedate[:10] }}</td>
                         <td class="p-3">₹{{ issuedue.fee }}</td>
                         <td class="p-3"> 
                             <form action="{{ url_for('members.member_info',mid=member.mid,issue_id=issuedue.issue_id) }}" method="POST" >

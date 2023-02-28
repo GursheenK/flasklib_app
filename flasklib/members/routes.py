@@ -107,6 +107,7 @@ def search_member(keyword,bid=0):
     page=request.args.get('page',1,type=int)
     members=Member.query.filter(Member.mname.contains(keyword.strip())).paginate(per_page=10,page=page)
     if 'issue_book' in rule.rule:
+        book=Book.query.get(bid)
         form=IssueForm()
-        return render_template('templates_issues/issue.html',title='Issue Book',form=form,members=members,keyword=keyword,bid=bid)
+        return render_template('templates_issues/issue.html',title='Issue Book',form=form,members=members,keyword=keyword,book=book)
     return render_template('templates_members/members.html',title='Members',members=members,keyword=keyword)

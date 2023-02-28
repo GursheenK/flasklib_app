@@ -4,20 +4,21 @@
 <div class="container card col-11 p-0">
   <div class="row g-0">
     <div class="col-md-3" style="background-color:rgb(33,37,41);">
-      <h1 class="text-white m-4 display-6">Issue Book</h1>
+      <h1 class="text-white m-4 display-6">Issue a Book</h1>
     </div>
     <div class="col-md-9">
       <div class="card-body">
-        <div class="text-muted">{{ bid }}</div>
+        <div class="text-muted">{{ book.title }}</div>
+        <br>
         <div class="row">
-          <form class="col-6" action="/issue_book/{{bid}}/search_member/None" method="POST">
+          <form class="col-6" action="/issue_book/{{book.bid}}/search_member/None" method="POST">
             <label class="form-control-label fw-bold">Name</label>
             <div class="input-group mb-3">
               <input type="text" name="searchbar" id="searchbar" autocomplete="off" class="form-control">
-              <input type="submit" value="Search" class="btn btn-outline-success" id="button-addon2">
+              <input type="submit" value="Search" class="btn btn-outline-success" id="searchButton">
             </div>
           </form>
-          <form class="col-6" class="d-grid" action="/issue_book/{{bid}}" method="POST">
+          <form class="col-6" class="d-grid" action="/issue_book/{{book.bid}}" method="POST">
             {{ form.hidden_tag() }}
             <fieldset>
               {{ form.days.label(class="form-control-label fw-bold") }}
@@ -46,12 +47,27 @@
   {% for pagenum in members.iter_pages() %}
       {% if pagenum %}
           {% if pagenum==members.page %} 
-          <li class="page-item active"><a class="page-link" href="{{ url_for('issues.issue_book',bid=bid,page=pagenum,keyword=keyword) }}">{{ pagenum }}</a></li>
+          <li class="page-item active"><a class="page-link" href="{{ url_for('issues.issue_book',bid=book.bid,page=pagenum,keyword=keyword) }}">{{ pagenum }}</a></li>
           {% else %}
-          <li class="page-item"><a class="page-link" href="{{ url_for('issues.issue_book',bid=bid,page=pagenum,keyword=keyword) }}">{{ pagenum }}</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('issues.issue_book',bid=book.bid,page=pagenum,keyword=keyword) }}">{{ pagenum }}</a></li>
           {% endif %}
       {% else %}
       . . .
       {% endif %}
   {% endfor %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+
+<script>
+    $("#searchButton").attr("disabled", "disabled");
+
+    $("#searchbar").on("keyup change", function(){
+        if($(this).val() != ""){
+            $("#searchButton").removeAttr("disabled");
+        } else {
+            $("#searchButton").attr("disabled", "disabled");
+        }
+    });
+</script>
 {% endblock pagination %}

@@ -15,7 +15,7 @@
             placeholder='Title/Authors'>
         {% endif %}
 
-        <input type="submit" value="Search" class="btn btn-outline-success mx-2">
+        <input type="submit" id="searchButton" value="Search" class="btn btn-outline-success mx-2">
         <a href="{{ url_for('books.add_book') }}" class="btn btn-outline-primary" type="submit">Add</a>
     </form>
 </div>
@@ -44,19 +44,19 @@
                 <td>{{ book.publish_date }}</td>
                 <td>{{ book.quantity }}</td>
                 <td>{{ book.availability }}</td>
-                <td class="col-4">
+                <td class="col-5">
                     <a class="btn" href="{{ url_for('books.update_book',bid=book.bid) }}" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" title="Update">
                         <i class="bi bi-pen" style="font-size: 1.3rem; color:green ;"></i>
                     </a>
                     <form action="{{ url_for('books.delete_book',bid=book.bid) }}" method="POST" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Delete" style="display: inline;width: 50px!important;">
+                        data-bs-placement="bottom" title="Delete" style="display: inline;width: 40px!important;">
                         <button type="submit" class="btn">
                             <i class="bi bi-trash" style="font-size: 1.3rem; color: red;"></i>
                         </button>
                     </form>
                     <a class="btn" href="{{ url_for('issues.issue_book',bid=book.bid) }}" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Issue" style="display: inline;width: 50px!important;">
+                        data-bs-placement="bottom" title="Issue" style="display: inline;width: 40px!important;">
                         <i class="bi bi-arrow-up-right-square" style="font-size: 1.3rem; color: royalblue ;"></i>
                     </a>
                     <a class="btn" href="{{ url_for('issues.issue_return',bid=book.bid) }}" data-bs-toggle="tooltip"
@@ -95,11 +95,11 @@
         {% endfor %}
     </ul>
 </nav>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
-</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
 <script>
+    $("#searchButton").attr("disabled", "disabled");
     $(function () {
         var allbks = document.getElementById('allbooknames').getAttribute('content')
         allbks = allbks.replace('[', '')
@@ -109,6 +109,14 @@
         $("#searchbar").autocomplete({
             source: allbks
         });
+    });
+
+    $("#searchbar").on("keyup change", function(){
+        if($(this).val() != ""){
+            $("#searchButton").removeAttr("disabled");
+        } else {
+            $("#searchButton").attr("disabled", "disabled");
+        }
     });
 </script>
 </div>
